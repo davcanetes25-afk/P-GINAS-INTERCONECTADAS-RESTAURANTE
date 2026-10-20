@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunch Go — Panel del Empleado</title>
+  <meta name="description" content="Consulta el menú del día y realiza tu reserva de almuerzo en Lunch Go." />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     PÁGINA 2: empleado.html — Panel del Empleado y Menú del Día
+     ============================================================ -->
+
+<!-- BARRA DE NAVEGACIÓN -->
+<header class="navbar" role="banner">
+  <a href="empleado.html" class="navbar__brand" aria-label="Lunch Go inicio">
+    <span class="navbar__logo-icon" aria-hidden="true">LG</span>
+    <span>Lunch Go</span>
+  </a>
+
+  <nav class="navbar__nav" role="navigation" aria-label="Navegación principal">
+    <a href="empleado.html" class="navbar__link active" id="nav-menu" aria-current="page">
+      <span class="icon" aria-hidden="true">🍽️</span> Menú
+    </a>
+    <a href="qr.html" class="navbar__link" id="nav-qr">
+      Recogida
+    </a>
+    <a href="historial.html" class="navbar__link" id="nav-historial">
+      <span class="icon" aria-hidden="true">📋</span> Historial
+    </a>
+  </nav>
+
+  <div class="navbar__user">
+    <div class="navbar__avatar" id="nav-avatar" aria-hidden="true">CR</div>
+    <span class="navbar__user-name" id="nav-nombre">Empleado</span>
+    <!-- Botón hamburguesa para móvil -->
+    <button
+      id="btn-hamburger"
+      class="navbar__hamburger"
+      type="button"
+      aria-label="Abrir menú de navegación"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+    <button
+      id="btn-logout"
+      class="btn btn--ghost btn--sm"
+      aria-label="Cerrar sesión"
+      title="Cerrar sesión"
+    >
+      Salir
+    </button>
+  </div>
+</header>
+
+<!-- MENÚ MÓVIL DESPLEGABLE -->
+<nav id="mobile-menu" class="navbar__mobile-menu" role="navigation" aria-label="Menú móvil">
+  <a href="empleado.html" class="navbar__link active" aria-current="page">
+    <span class="icon" aria-hidden="true">🍽️</span> Menú del día
+  </a>
+  <a href="qr.html" class="navbar__link">
+    Recogida
+  </a>
+  <a href="historial.html" class="navbar__link">
+    <span class="icon" aria-hidden="true">📋</span> Historial de reservas
+  </a>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="page-wrapper">
+  <main class="main-content" id="main-content" role="main">
+
+    <!-- Encabezado de bienvenida -->
+    <div class="page-header">
+      <p class="page-header__greeting" id="saludo-hora">Buenos días</p>
+      <h1 class="page-header__title" id="bienvenida-nombre">Bienvenido/a</h1>
+      <p class="page-header__subtitle" id="fecha-hoy"></p>
+    </div>
+
+    <!-- Aviso de horario -->
+    <div id="aviso-horario" class="schedule-notice hidden" role="note" aria-live="polite">
+      <span class="schedule-notice__icon" aria-hidden="true">🕐</span>
+      <div>
+        <p class="schedule-notice__title">Fuera del horario de reservas</p>
+        <p class="schedule-notice__text" id="aviso-horario-texto"></p>
+      </div>
+    </div>
+
+    <!-- ===== PROTEÍNA DEL DÍA ===== -->
+    <section aria-labelledby="proteina-section-title">
+      <h2 id="proteina-section-title" class="section-title">
+        <span class="icon" aria-hidden="true">⭐</span>
+        Proteína del día
+      </h2>
+      <div class="protein-banner" id="proteina-banner" aria-label="Proteína del día">
+        <div class="protein-banner__icon" id="proteina-emoji" aria-hidden="true">🍗</div>
+        <div>
+          <p class="protein-banner__label">Hoy servimos</p>
+          <p class="protein-banner__name" id="proteina-nombre">Cargando...</p>
+          <p class="protein-banner__desc" id="proteina-desc"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MENÚ DEL DÍA ===== -->
+    <section aria-labelledby="menu-section-title">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-5);">
+        <h2 id="menu-section-title" class="section-title" style="margin-bottom:0; border-bottom:none;">
+          <span class="icon" aria-hidden="true">🍽️</span>
+          Menú del día
+        </h2>
+        <span id="estado-horario-badge" class="badge badge--pending"></span>
+      </div>
+
+      <!-- Tarjetas de almuerzos -->
+      <div class="menu-grid" id="menu-grid" role="list" aria-label="Opciones de almuerzo disponibles">
+        <!-- Generado por JS -->
+      </div>
+    </section>
+
+    <!-- Botón de reserva (aparece al seleccionar un plato) -->
+    <div id="reserva-panel" class="hidden" style="position: sticky; bottom: 20px; margin-top: var(--space-6);">
+      <div style="
+        background: var(--color-white);
+        border: 2px solid var(--color-primary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-5) var(--space-6);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-4);
+        box-shadow: var(--shadow-lg);
+      ">
+        <div>
+          <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Seleccionaste</p>
+          <p id="seleccion-nombre" style="font-size: var(--font-size-lg); font-weight:700; color: var(--color-text);">—</p>
+        </div>
+        <button
+          id="btn-reservar"
+          class="btn btn--primary btn--lg"
+          aria-label="Confirmar reserva del almuerzo seleccionado"
+        >
+          <span class="icon" aria-hidden="true">✅</span>
+          Reservar almuerzo
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== MIS RESERVAS ===== -->
+    <section aria-labelledby="reservas-section-title" style="margin-top: var(--space-10);">
+      <h2 id="reservas-section-title" class="section-title">
+        <span class="icon" aria-hidden="true">📅</span>
+        Mis reservas de hoy
+      </h2>
+
+      <div id="mis-reservas-container">
+        <!-- Generado por JS -->
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== MODAL DE CONFIRMACIÓN DE RESERVA ===== -->
+<div id="modal-reserva" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-reserva-title">
+  <div class="modal">
+    <h2 class="modal__title" id="modal-reserva-title">
+      <span class="icon" aria-hidden="true">🍽️</span>
+      Confirmar reserva
+    </h2>
+
+    <div id="modal-reserva-detalle" style="
+      background: var(--color-bg);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-5);
+    ">
+      <!-- Detalle del plato seleccionado -->
+    </div>
+
+    <div class="alert alert--info" style="margin-bottom: var(--space-4);">
+      <span class="alert-icon" aria-hidden="true">ℹ️</span>
+      <span>Al confirmar, se registrará tu reserva. La recogida se confirma en la página <strong>Recoger</strong> con tu cédula.</span>
+    </div>
+
+    <div class="modal__actions">
+      <button id="btn-cancelar-modal" class="btn btn--ghost">Cancelar</button>
+      <button id="btn-confirmar-reserva" class="btn btn--primary">
+        <span class="icon" aria-hidden="true">✅</span>
+        Confirmar reserva
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL DE DETALLES DEL PLATO ===== -->
+<div id="modal-detalles" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-detalles-title">
+  <div class="modal">
+    <h2 class="modal__title" id="modal-detalles-title">
+      <span class="icon" id="detalle-emoji" aria-hidden="true">🍽️</span>
+      <span id="detalle-nombre">Detalle del plato</span>
+    </h2>
+
+    <p id="detalle-desc" style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin-bottom: var(--space-5);"></p>
+
+    <p style="font-size: var(--font-size-sm); font-weight:600; color: var(--color-text); margin-bottom: var(--space-3);">
+      Acompañamientos:
+    </p>
+    <div id="detalle-acompanamientos" style="display:flex; flex-wrap:wrap; gap:var(--space-2); margin-bottom: var(--space-5);">
+      <!-- Tags generados por JS -->
+    </div>
+
+    <div class="modal__actions">
+      <button id="btn-cerrar-detalles" class="btn btn--ghost">Cerrar</button>
+      <button id="btn-seleccionar-desde-detalles" class="btn btn--primary">
+        <span class="icon" aria-hidden="true">🍽️</span>
+        Seleccionar este plato
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/empleado.js"></script>
+
+
+</body>
+</html>

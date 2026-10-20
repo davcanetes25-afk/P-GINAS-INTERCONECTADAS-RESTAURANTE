@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunch Go — Inicio de sesión</title>
+  <meta name="description" content="Lunch Go: Sistema de reservas y control de entrega de almuerzos para empleados. Inicia sesión para reservar tu almuerzo." />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     PÁGINA 1: index.html — Inicio de sesión
+     ============================================================ -->
+
+<main class="login-page" id="login-page">
+  <div class="login-card" role="main" aria-label="Formulario de inicio de sesión">
+
+    <!-- Logo y nombre -->
+    <div class="login-card__logo">
+      <div class="login-card__logo-icon" aria-hidden="true">LG</div>
+      <h1 class="login-card__title">Lunch Go</h1>
+      <p class="login-card__subtitle">Sistema de Reservas de Almuerzos</p>
+    </div>
+
+    <!-- Título del formulario -->
+    <h2 class="login-card__form-title">Iniciar sesión</h2>
+
+    <!-- Mensaje de error general -->
+    <div id="msg-error" class="alert alert--error hidden" role="alert" aria-live="polite">
+      <span class="alert-icon" aria-hidden="true">⚠️</span>
+      <span id="msg-error-text">Credenciales incorrectas.</span>
+    </div>
+
+    <!-- Formulario -->
+    <form id="login-form" novalidate>
+
+      <!-- Correo / Usuario -->
+      <div class="form-group">
+        <label for="input-email" class="form-label">
+          Correo electrónico <span class="required" aria-hidden="true">*</span>
+        </label>
+        <div class="input-wrapper">
+          <span class="input-icon" aria-hidden="true">✉️</span>
+          <input
+            type="email"
+            id="input-email"
+            name="email"
+            class="form-input"
+            placeholder="usuario@lunchgo.com"
+            autocomplete="email"
+            required
+            aria-required="true"
+            aria-describedby="email-error"
+          />
+        </div>
+        <span id="email-error" class="form-error" role="alert"></span>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="form-group">
+        <label for="input-password" class="form-label">
+          Contraseña <span class="required" aria-hidden="true">*</span>
+        </label>
+        <div class="input-wrapper">
+          <span class="input-icon" aria-hidden="true">🔒</span>
+          <input
+            type="password"
+            id="input-password"
+            name="password"
+            class="form-input"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+            aria-required="true"
+            aria-describedby="password-error"
+          />
+        </div>
+        <span id="password-error" class="form-error" role="alert"></span>
+      </div>
+
+      <!-- Botón de ingreso -->
+      <button
+        type="submit"
+        id="btn-login"
+        class="btn btn--primary btn--full btn--lg"
+        aria-label="Iniciar sesión en Lunch Go"
+      >
+        Iniciar sesión
+      </button>
+
+    </form>
+
+    <!-- Enlace de recuperación -->
+    <div class="text-center mt-6">
+      <a
+        href="#"
+        id="link-recover"
+        class="text-muted"
+        style="color: var(--color-primary); font-size: var(--font-size-sm); font-weight: 500;"
+        aria-label="Recuperar contraseña"
+      >
+        ¿Olvidaste tu contraseña?
+      </a>
+    </div>
+
+    <!-- Cuentas de demostración -->
+    <div
+      class="alert alert--info mt-6"
+      style="flex-direction: column; gap: var(--space-2);"
+      role="note"
+      aria-label="Cuentas de demostración"
+    >
+      <div style="display:flex; align-items:center; gap:var(--space-2);">
+        <span class="alert-icon" aria-hidden="true">ℹ️</span>
+        <strong>Cuentas de demostración</strong>
+      </div>
+      <div style="margin-left: 26px; font-size: var(--font-size-xs); line-height:1.8;">
+        <div>👤 <strong>Empleado:</strong> empleado@lunchgo.com / Empleado123</div>
+        <div>🔑 <strong>Admin:</strong> admin@lunchgo.com / Admin123</div>
+      </div>
+      <div style="margin-left:26px; font-size:var(--font-size-xs); opacity:0.75; margin-top:4px;">
+        Credenciales de ejemplo para validar el flujo del sistema.
+      </div>
+    </div>
+
+    <!-- Modal de recuperación de contraseña -->
+    <div id="modal-recover" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="recover-title">
+      <div class="modal">
+        <h2 class="modal__title" id="recover-title">
+          <span class="icon" aria-hidden="true">🔑</span>
+          Recuperar contraseña
+        </h2>
+        <p class="text-muted mb-4" style="font-size: var(--font-size-sm);">
+          Ingresa tu correo electrónico. En una aplicación real, recibirías un enlace de recuperación.
+        </p>
+        <div class="form-group">
+          <label for="recover-email" class="form-label">Correo electrónico</label>
+          <input type="email" id="recover-email" class="form-input" placeholder="usuario@lunchgo.com" />
+        </div>
+        <div id="recover-msg" class="alert alert--success hidden">
+          <span class="alert-icon" aria-hidden="true">✅</span>
+          <span>Si el correo existe, recibirás instrucciones de recuperación (simulación).</span>
+        </div>
+        <div class="modal__actions">
+          <button id="btn-recover-cancel" class="btn btn--ghost">Cancelar</button>
+          <button id="btn-recover-send" class="btn btn--primary">
+            <span class="icon" aria-hidden="true">📧</span>
+            Enviar instrucciones
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Scripts -->
+<script src="js/auth.js"></script>
+<script>
+  /**
+   * index.js (inline) — Lógica de la página de inicio de sesión.
+   * Valida campos y autentica al usuario redirigiendo según su rol.
+   */
+
+  // Si ya hay sesión activa, redirigir automáticamente
+  (function redirigirSiSesion() {
+    const sesion = obtenerSesion();
+    if (sesion) {
+      if (sesion.rol === 'administrador') {
+        window.location.href = 'administrador.html';
+      } else {
+        window.location.href = 'empleado.html';
+      }
+    }
+  })();
+
+  // ---------- Referencias al DOM ----------
+  const form        = document.getElementById('login-form');
+  const inputEmail  = document.getElementById('input-email');
+  const inputPass   = document.getElementById('input-password');
+  const emailError  = document.getElementById('email-error');
+  const passError   = document.getElementById('password-error');
+  const msgError    = document.getElementById('msg-error');
+  const msgErrorTxt = document.getElementById('msg-error-text');
+  const btnLogin    = document.getElementById('btn-login');
+
+  // ---------- Modal de recuperación ----------
+  const linkRecover   = document.getElementById('link-recover');
+  const modalRecover  = document.getElementById('modal-recover');
+  const btnRecoverOk  = document.getElementById('btn-recover-send');
+  const btnRecoverCx  = document.getElementById('btn-recover-cancel');
+  const recoverMsg    = document.getElementById('recover-msg');
+
+  linkRecover.addEventListener('click', function(e) {
+    e.preventDefault();
+    modalRecover.classList.remove('hidden');
+    document.getElementById('recover-email').focus();
+  });
+
+  btnRecoverCx.addEventListener('click', function() {
+    modalRecover.classList.add('hidden');
+    recoverMsg.classList.add('hidden');
+  });
+
+  btnRecoverOk.addEventListener('click', function() {
+    const email = document.getElementById('recover-email').value.trim();
+    if (!email) return;
+    recoverMsg.classList.remove('hidden');
+  });
+
+  // Cerrar modal al hacer clic fuera
+  modalRecover.addEventListener('click', function(e) {
+    if (e.target === modalRecover) {
+      modalRecover.classList.add('hidden');
+    }
+  });
+
+  // ---------- Limpiar errores al escribir ----------
+  [inputEmail, inputPass].forEach(function(input) {
+    input.addEventListener('input', function() {
+      this.classList.remove('error');
+      msgError.classList.add('hidden');
+    });
+  });
+
+  // ---------- Validación y envío ----------
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Limpiar errores previos
+    emailError.classList.remove('visible');
+    passError.classList.remove('visible');
+    inputEmail.classList.remove('error');
+    inputPass.classList.remove('error');
+    msgError.classList.add('hidden');
+
+    let valido = true;
+    const email    = inputEmail.value.trim();
+    const password = inputPass.value;
+
+    // Validar email
+    if (!email) {
+      emailError.textContent = 'El correo electrónico es obligatorio.';
+      emailError.classList.add('visible');
+      inputEmail.classList.add('error');
+      valido = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailError.textContent = 'Ingresa un correo electrónico válido.';
+      emailError.classList.add('visible');
+      inputEmail.classList.add('error');
+      valido = false;
+    }
+
+    // Validar contraseña
+    if (!password) {
+      passError.textContent = 'La contraseña es obligatoria.';
+      passError.classList.add('visible');
+      inputPass.classList.add('error');
+      valido = false;
+    }
+
+    if (!valido) return;
+
+    // Estado de carga
+    btnLogin.disabled = true;
+    btnLogin.innerHTML = '<span class="spin" aria-hidden="true">⚙️</span> Verificando...';
+
+    // Simular breve retardo de red
+    setTimeout(function() {
+      const usuario = autenticar(email, password);
+
+      if (usuario) {
+        guardarSesion(usuario);
+        btnLogin.innerHTML = '<span aria-hidden="true">✅</span> ¡Bienvenido!';
+
+        // Redirigir según rol
+        setTimeout(function() {
+          if (usuario.rol === 'administrador') {
+            window.location.href = 'administrador.html';
+          } else {
+            window.location.href = 'empleado.html';
+          }
+        }, 500);
+      } else {
+        // Credenciales incorrectas
+        msgErrorTxt.textContent = 'Correo o contraseña incorrectos. Verifica tus datos e intenta de nuevo.';
+        msgError.classList.remove('hidden');
+        inputEmail.classList.add('error');
+        inputPass.classList.add('error');
+        inputPass.value = '';
+        btnLogin.disabled = false;
+        btnLogin.innerHTML = '<span class="icon" aria-hidden="true">🚀</span> Iniciar sesión';
+        inputEmail.focus();
+      }
+    }, 600);
+  });
+</script>
+
+</body>
+</html>

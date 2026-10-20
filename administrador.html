@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunch Go — Panel Administrativo</title>
+  <meta name="description" content="Panel administrativo de Lunch Go: gestiona el menú del día, revisa reservas y controla las entregas." />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     PÁGINA 4: administrador.html — Panel Administrativo
+     ============================================================ -->
+
+<!-- BARRA DE NAVEGACIÓN -->
+<header class="navbar" role="banner">
+  <a href="administrador.html" class="navbar__brand" aria-label="Lunch Go administración">
+    <span class="navbar__logo-icon" aria-hidden="true">LG</span>
+    <span>Lunch Go</span>
+  </a>
+
+  <nav class="navbar__nav" role="navigation" aria-label="Navegación administrativo">
+    <a href="administrador.html" class="navbar__link active" aria-current="page">
+      <span class="icon" aria-hidden="true">🏠</span> Panel
+    </a>
+    <a href="qr.html" class="navbar__link">Recogida</a>
+    <a href="historial.html" class="navbar__link">
+      <span class="icon" aria-hidden="true">📋</span> Historial
+    </a>
+  </nav>
+
+  <div class="navbar__user">
+    <div class="navbar__avatar" id="nav-avatar" aria-hidden="true">AD</div>
+    <span class="navbar__user-name" id="nav-nombre">Admin</span>
+    <button
+      id="btn-hamburger"
+      class="navbar__hamburger"
+      type="button"
+      aria-label="Abrir menú de navegación"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+    <button id="btn-logout" class="btn btn--ghost btn--sm" type="button" aria-label="Cerrar sesión" title="Cerrar sesión">Salir</button>
+  </div>
+</header>
+
+<nav id="mobile-menu" class="navbar__mobile-menu" role="navigation" aria-label="Menú móvil"></nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="page-wrapper">
+  <main class="main-content" role="main">
+
+    <!-- Encabezado -->
+    <div class="page-header">
+      <p class="page-header__greeting" id="admin-saludo">Panel de Administración</p>
+      <h1 class="page-header__title">Panel Administrativo</h1>
+      <p class="page-header__subtitle" id="fecha-hoy-admin"></p>
+    </div>
+
+    <!-- ===== ESTADÍSTICAS DEL DÍA ===== -->
+    <section aria-labelledby="stats-title">
+      <h2 id="stats-title" class="section-title">
+        <span class="icon" aria-hidden="true">📊</span>
+        Resumen del día
+      </h2>
+      <div class="stats-grid" role="list" aria-label="Estadísticas de reservas del día">
+        <div class="stat-card" role="listitem">
+          <div class="stat-card__icon stat-card__icon--blue" aria-hidden="true">📅</div>
+          <div class="stat-card__value" id="stat-total">0</div>
+          <div class="stat-card__label">Reservas registradas</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-card__icon stat-card__icon--green" aria-hidden="true">✅</div>
+          <div class="stat-card__value" id="stat-entregadas">0</div>
+          <div class="stat-card__label">Almuerzos entregados</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-card__icon stat-card__icon--yellow" aria-hidden="true">⏳</div>
+          <div class="stat-card__value" id="stat-pendientes">0</div>
+          <div class="stat-card__label">Pendientes de entrega</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-card__icon stat-card__icon--red" aria-hidden="true">❌</div>
+          <div class="stat-card__value" id="stat-canceladas">0</div>
+          <div class="stat-card__label">Canceladas</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GRID: GESTIÓN DE MENÚ Y PROTEÍNA ===== -->
+    <div class="admin-grid">
+
+      <!-- COLUMNA 1: Proteína del día -->
+      <section aria-labelledby="proteina-admin-title">
+        <div class="card">
+          <div class="card__header">
+            <h2 id="proteina-admin-title" class="card__title">
+              <span class="icon" aria-hidden="true">⭐</span>
+              Proteína del día
+            </h2>
+          </div>
+          <div class="card__body">
+            <div class="form-group">
+              <label for="proteina-emoji-input" class="form-label">Icono de proteína (opcional)</label>
+              <input type="text" id="proteina-emoji-input" class="form-input" placeholder="🍗" maxlength="4" />
+            </div>
+            <div class="form-group">
+              <label for="proteina-nombre-input" class="form-label">Nombre <span class="required">*</span></label>
+              <input type="text" id="proteina-nombre-input" class="form-input" placeholder="Ej: Pollo asado" />
+            </div>
+            <div class="form-group">
+              <label for="proteina-desc-input" class="form-label">Descripción</label>
+              <textarea id="proteina-desc-input" class="form-textarea" placeholder="Descripción breve de la preparación..." rows="3"></textarea>
+            </div>
+            <button id="btn-guardar-proteina" class="btn btn--primary btn--full">
+              Guardar proteína del día
+            </button>
+            <div id="msg-proteina" class="hidden mt-4"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COLUMNA 2: Agregar / Editar plato del menú -->
+      <section aria-labelledby="menu-admin-title">
+        <div class="card">
+          <div class="card__header">
+            <h2 id="menu-admin-title" class="card__title">
+              <span class="icon" aria-hidden="true">🍽️</span>
+              <span id="menu-form-title-text">Agregar plato al menú</span>
+            </h2>
+            <button id="btn-nuevo-plato" class="btn btn--secondary btn--sm">
+              + Nuevo
+            </button>
+          </div>
+          <div class="card__body">
+            <input type="hidden" id="plato-edit-id" value="" />
+
+            <div class="form-group">
+              <label for="plato-emoji" class="form-label">Icono del plato (opcional)</label>
+              <input type="text" id="plato-emoji" class="form-input" placeholder="🍛" maxlength="4" />
+            </div>
+            <div class="form-group">
+              <label for="plato-nombre" class="form-label">Nombre del plato <span class="required">*</span></label>
+              <input type="text" id="plato-nombre" class="form-input" placeholder="Ej: Casado Tradicional" />
+              <span id="plato-nombre-error" class="form-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="plato-desc" class="form-label">Descripción <span class="required">*</span></label>
+              <textarea id="plato-desc" class="form-textarea" placeholder="Descripción del plato..." rows="3"></textarea>
+              <span id="plato-desc-error" class="form-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="plato-acomp" class="form-label">Acompañamientos (separados por coma)</label>
+              <input type="text" id="plato-acomp" class="form-input" placeholder="Arroz, Frijoles, Ensalada" />
+            </div>
+            <div class="form-group">
+              <label for="plato-categoria" class="form-label">Categoría</label>
+              <select id="plato-categoria" class="form-select">
+                <option value="Casado">Casado</option>
+                <option value="Sopa">Sopa</option>
+                <option value="Vegetariano">Vegetariano</option>
+                <option value="Pasta">Pasta</option>
+                <option value="Especial">Especial</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+
+            <div style="display:flex; gap: var(--space-3);">
+              <button id="btn-guardar-plato" class="btn btn--primary" style="flex:1;">
+                <span id="btn-guardar-text">Agregar plato</span>
+              </button>
+              <button id="btn-cancelar-edicion" class="btn btn--ghost hidden">
+                Cancelar
+              </button>
+            </div>
+
+            <div id="msg-menu" class="hidden mt-4"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== LISTA DE PLATOS ACTUALES ===== -->
+    <section aria-labelledby="lista-menu-title" class="mb-8">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-5);">
+        <h2 id="lista-menu-title" class="section-title" style="margin-bottom:0; border-bottom:none;">
+          <span class="icon" aria-hidden="true">📋</span>
+          Platos configurados
+        </h2>
+      </div>
+      <div class="table-wrapper">
+        <table class="table" aria-label="Lista de platos del menú">
+          <thead>
+            <tr>
+              <th scope="col">Plato</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Acompañamientos</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-menu-body">
+            <!-- Generado por JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== CONTROL DE ENTREGAS ===== -->
+    <section aria-labelledby="entregas-title">
+      <h2 id="entregas-title" class="section-title">
+        <span class="icon" aria-hidden="true">🚀</span>
+        Control de entregas — Hoy
+      </h2>
+
+      <div class="table-wrapper">
+        <table class="table" id="tabla-entregas" aria-label="Registro de entregas del día">
+          <thead>
+            <tr>
+              <th scope="col">Empleado</th>
+              <th scope="col">Cédula</th>
+              <th scope="col">Almuerzo</th>
+              <th scope="col">Hora reserva</th>
+              <th scope="col">Hora entrega</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-entregas-body">
+            <!-- Generado por JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-entregas" class="empty-state hidden">
+        <div class="empty-state__icon">📋</div>
+        <p class="empty-state__title">Sin reservas para hoy</p>
+        <p class="empty-state__text">Aún no se han registrado reservas. Las reservas se realizan entre las 8:00 y las 10:00 a. m.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Scripts -->
+<script src="js/auth.js"></script>
+<script src="js/administrador.js"></script>
+<script src="js/nav.js"></script>
+
+</body>
+</html>

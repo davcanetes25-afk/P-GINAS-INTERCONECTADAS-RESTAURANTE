@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunch Go — Historial de Reservas</title>
+  <meta name="description" content="Historial completo de reservas y entregas de almuerzos en Lunch Go. Filtra por fecha, almuerzo y estado." />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     PÁGINA 5: historial.html — Historial y Seguimiento de Reservas
+     ============================================================ -->
+
+<!-- BARRA DE NAVEGACIÓN (configurada por JS según rol) -->
+<header class="navbar" role="banner">
+  <a href="#" class="navbar__brand" id="nav-brand" aria-label="Lunch Go inicio">
+    <span class="navbar__logo-icon" aria-hidden="true">LG</span>
+    <span>Lunch Go</span>
+  </a>
+
+  <nav class="navbar__nav" role="navigation" aria-label="Navegación principal" id="nav-links">
+    <!-- Generado por JS según el rol -->
+  </nav>
+
+  <div class="navbar__user">
+    <div class="navbar__avatar" id="nav-avatar" aria-hidden="true">?</div>
+    <span class="navbar__user-name" id="nav-nombre">Usuario</span>
+    <button
+      id="btn-hamburger"
+      class="navbar__hamburger"
+      type="button"
+      aria-label="Abrir menú de navegación"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+    <button id="btn-logout" class="btn btn--ghost btn--sm" type="button" aria-label="Cerrar sesión" title="Cerrar sesión">Salir</button>
+  </div>
+</header>
+
+<nav id="mobile-menu" class="navbar__mobile-menu" role="navigation" aria-label="Menú móvil"></nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="page-wrapper">
+  <main class="main-content" role="main">
+
+    <!-- Encabezado -->
+    <div class="page-header">
+      <p class="page-header__greeting" id="historial-rol-label">Mis reservas</p>
+      <h1 class="page-header__title">Historial de reservas</h1>
+      <p class="page-header__subtitle">Consulta el registro de tus reservas y su estado actual.</p>
+    </div>
+
+    <!-- Botones de acceso rápido al panel -->
+    <div style="display:flex; gap: var(--space-3); margin-bottom: var(--space-6); flex-wrap: wrap;">
+      <a id="btn-volver-panel" href="empleado.html" class="btn btn--secondary btn--sm">
+        <span class="icon" aria-hidden="true">⬅️</span>
+        <span id="btn-panel-texto">Volver al panel</span>
+      </a>
+      <a href="qr.html" class="btn btn--ghost btn--sm">
+        <span class="icon" aria-hidden="true">📱</span>
+        Confirmar recogida
+      </a>
+    </div>
+
+    <!-- ===== FILTROS ===== -->
+    <section aria-label="Filtros de búsqueda">
+      <div class="filters-bar" role="search" aria-label="Filtrar historial de reservas">
+        <span class="filters-bar__label">Filtrar:</span>
+
+        <div>
+          <label for="filtro-fecha" class="form-label" style="margin-bottom:4px; font-size: var(--font-size-xs);">Fecha</label>
+          <input type="date" id="filtro-fecha" class="form-input" aria-label="Filtrar por fecha" />
+        </div>
+
+        <div>
+          <label for="filtro-estado" class="form-label" style="margin-bottom:4px; font-size: var(--font-size-xs);">Estado</label>
+          <select id="filtro-estado" class="form-select" aria-label="Filtrar por estado">
+            <option value="">Todos los estados</option>
+            <option value="reservada">Reservada</option>
+            <option value="entregada">Entregada</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="pendiente">Pendiente</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="filtro-almuerzo" class="form-label" style="margin-bottom:4px; font-size: var(--font-size-xs);">Almuerzo</label>
+          <input type="text" id="filtro-almuerzo" class="form-input" placeholder="Buscar por nombre..." aria-label="Filtrar por nombre de almuerzo" />
+        </div>
+
+        <button id="btn-limpiar-filtros" class="btn btn--ghost btn--sm" aria-label="Limpiar todos los filtros">
+          Limpiar filtros
+        </button>
+      </div>
+    </section>
+
+    <!-- Resumen de resultados -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: var(--space-4);">
+      <p id="resumen-resultados" class="text-muted">Cargando reservas...</p>
+    </div>
+
+    <!-- ===== TABLA DE HISTORIAL ===== -->
+    <section aria-labelledby="tabla-historial-label">
+      <h2 id="tabla-historial-label" class="sr-only">Tabla de historial de reservas</h2>
+
+      <div class="table-wrapper" id="tabla-container">
+        <table class="table" aria-label="Historial de reservas" id="tabla-historial">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col" id="col-empleado">Empleado</th>
+              <th scope="col">Almuerzo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Hora reserva</th>
+              <th scope="col">Hora entrega</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-historial-body">
+            <!-- Generado por JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Estado vacío -->
+      <div id="empty-historial" class="empty-state hidden" role="status" aria-live="polite">
+        <div class="empty-state__icon">📋</div>
+        <p class="empty-state__title">Sin registros</p>
+        <p class="empty-state__text" id="empty-historial-texto">
+          No hay reservas que coincidan con los filtros seleccionados.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- Estilo para accesibilidad: ocultar texto visualmente pero mantenerlo para lectores de pantalla -->
+<style>
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+</style>
+
+<!-- Scripts -->
+<script src="js/auth.js"></script>
+<script src="js/historial.js"></script>
+<script src="js/nav.js"></script>
+
+</body>
+</html>

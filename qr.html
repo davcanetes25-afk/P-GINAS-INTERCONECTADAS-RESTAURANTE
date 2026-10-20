@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lunch Go — Confirmar recogida</title>
+  <meta name="description" content="Confirma la recogida de tu almuerzo en Lunch Go con tu número de cédula." />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body class="page-qr">
+
+<header class="navbar" role="banner">
+  <a href="index.html" class="navbar__brand" id="nav-brand" aria-label="Lunch Go inicio">
+    <span class="navbar__logo-icon" aria-hidden="true">LG</span>
+    <span>Lunch Go</span>
+  </a>
+
+  <nav class="navbar__nav" role="navigation" aria-label="Navegación principal" id="nav-links"></nav>
+
+  <div class="navbar__user">
+    <div class="navbar__avatar" id="nav-avatar" aria-hidden="true">?</div>
+    <span class="navbar__user-name" id="nav-nombre">Visitante</span>
+    <button
+      id="btn-hamburger"
+      class="navbar__hamburger"
+      type="button"
+      aria-label="Abrir menú de navegación"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+    <button id="btn-logout" class="btn btn--ghost btn--sm" type="button" aria-label="Cerrar sesión" title="Cerrar sesión">
+      Salir
+    </button>
+  </div>
+</header>
+
+<nav id="mobile-menu" class="navbar__mobile-menu" role="navigation" aria-label="Menú móvil"></nav>
+
+<div class="page-wrapper">
+  <main class="main-content--narrow pickup-page" id="main-qr" role="main">
+    <header class="page-header pickup-header">
+      <p class="pickup-eyebrow">RECOGIDA DE PEDIDOS</p>
+      <h1 class="page-header__title">Confirma la entrega</h1>
+      <p class="page-header__subtitle">
+        Verificamos tu reserva para que puedas recoger tu almuerzo de forma rápida y sencilla.
+      </p>
+    </header>
+
+    <div class="pickup-layout">
+      <section class="pickup-card" aria-labelledby="cedula-form-title">
+        <p class="pickup-card__eyebrow">VALIDACIÓN RÁPIDA</p>
+        <h2 id="cedula-form-title" class="pickup-card__title">Ingresa tu cédula</h2>
+        <p class="pickup-card__description">
+          Usa el número registrado en tu cuenta para confirmar la reserva de hoy.
+        </p>
+
+        <form id="form-cedula" novalidate>
+          <div class="form-group">
+            <label for="input-cedula" class="form-label">
+              Número de cédula <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="input-cedula"
+              name="cedula"
+              class="form-input"
+              placeholder="Ej.: 1-0123-4567"
+              inputmode="numeric"
+              autocomplete="off"
+              required
+              aria-required="true"
+              aria-describedby="cedula-error cedula-hint"
+            />
+            <span id="cedula-error" class="form-error" role="alert"></span>
+            <p id="cedula-hint" class="pickup-field-hint">
+              Escríbela tal como aparece en tu perfil.
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            id="btn-confirmar-qr"
+            class="btn btn--primary btn--full btn--lg"
+            aria-label="Confirmar recogida del almuerzo"
+          >
+            Confirmar recogida
+          </button>
+        </form>
+
+        <div id="resultado-qr" class="hidden pickup-result" tabindex="-1" role="alert" aria-live="assertive"></div>
+      </section>
+
+      <aside class="pickup-guide" aria-labelledby="pickup-guide-title">
+        <div class="pickup-guide__mark" aria-hidden="true">✓</div>
+        <p class="pickup-card__eyebrow">EN 3 PASOS</p>
+        <h2 id="pickup-guide-title" class="pickup-guide__title">¿Cómo funciona?</h2>
+        <ol class="pickup-steps">
+          <li>
+            <span class="pickup-steps__number">1</span>
+            <span>Ingresa tu número de cédula.</span>
+          </li>
+          <li>
+            <span class="pickup-steps__number">2</span>
+            <span>Comprobamos que tengas una reserva para hoy.</span>
+          </li>
+          <li>
+            <span class="pickup-steps__number">3</span>
+            <span>Tu reserva queda registrada como entregada.</span>
+          </li>
+        </ol>
+        <p class="pickup-guide__note" role="note">
+          Para validar tu entrega, utiliza tu número de cédula. El lector QR no está disponible por ahora.
+        </p>
+      </aside>
+    </div>
+
+    <nav class="pickup-actions" aria-label="Acciones">
+      <a id="link-volver-panel" href="empleado.html" class="btn btn--secondary">
+        Volver al menú
+      </a>
+      <a href="historial.html" class="btn btn--ghost">
+        Consultar historial
+      </a>
+    </nav>
+  </main>
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/qr.js"></script>
+<script src="js/nav.js"></script>
+
+</body>
+</html>
